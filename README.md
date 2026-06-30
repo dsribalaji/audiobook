@@ -20,21 +20,35 @@ Convert any PDF or EPUB into an audiobook using AI text-to-speech. Works with an
 
 ## Quick Start
 
+### One-line install (any agent)
+
 ```bash
-# 1. Clone or navigate to the Audiobook directory
-cd /home/otwos/Projects/Audiobook
+curl -sSL https://raw.githubusercontent.com/dsribalaji/audiobook/main/install.sh | bash
+```
 
-# 2. Run setup (creates venv, installs deps)
+This clones the repo to `~/.audiobook-skill`, sets up the venv, and installs the `/audiobook` command for opencode if detected.
+
+### opencode
+
+Type `/audiobook` — it asks for the book file, mode, and voice. Done.
+
+### Claude Code / Copilot / Cursor / Other agents
+
+Copy the install prompt from [install.md](install.md) and paste it into your agent. It will self-install.
+
+### Manual CLI
+
+```bash
+git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+cd ~/.audiobook-skill
 bash scripts/setup.sh
-
-# 3. Activate the venv
 source .venv/bin/activate
 
-# 4. Extract text from a book
+# Extract
 python scripts/extract.py "/path/to/book.pdf" --output chapters.json
 
-# 5. Convert to audio (after summarizing if needed)
-python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --output ./output/
+# Convert
+python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --output ./output/my-book/
 ```
 
 ## Conversion Modes
