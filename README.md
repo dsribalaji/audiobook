@@ -1,6 +1,6 @@
 # Book to Audiobook
 
-Convert any PDF or EPUB into an audiobook using AI text-to-speech. Works with any agentic CLI (opencode, Claude Code, Cursor, etc.).
+Convert any PDF or EPUB into an audiobook using AI text-to-speech. Works with any agentic CLI — opencode, Claude Code, Copilot, Cursor, Aider, Windsurf, or plain terminal.
 
 ## Features
 
@@ -18,38 +18,102 @@ Convert any PDF or EPUB into an audiobook using AI text-to-speech. Works with an
 - `uv` (recommended) or `pip`
 - Internet connection (edge-tts is network-based)
 
-## Quick Start
+---
 
-### One-line install (any agent)
+## Installation
+
+### One-line install
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/dsribalaji/audiobook/main/install.sh | bash
 ```
 
-This clones the repo to `~/.audiobook-skill`, sets up the venv, and installs the `/audiobook` command for opencode if detected.
+Clones to `~/.audiobook-skill`, sets up venv, installs `/audiobook` command for opencode if detected.
 
 ### opencode
 
-Type `/audiobook` — it asks for the book file, mode, and voice. Done.
+Type `/audiobook` — asks for book file, mode, voice. Done.
 
-### Claude Code / Copilot / Cursor / Other agents
+### Claude Code
 
-Copy the install prompt from [install.md](install.md) and paste it into your agent. It will self-install.
+Paste this into Claude Code:
 
-### Manual CLI
-
-```bash
-git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
-cd ~/.audiobook-skill
-bash scripts/setup.sh
-source .venv/bin/activate
-
-# Extract
-python scripts/extract.py "/path/to/book.pdf" --output chapters.json
-
-# Convert
-python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --output ./output/my-book/
 ```
+Install the book-to-audio skill from https://github.com/dsribalaji/audiobook
+
+Steps:
+1. git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+2. Run: cd ~/.audiobook-skill && bash scripts/setup.sh
+3. When I ask to convert a book, read ~/.audiobook-skill/SKILL.md and follow the workflow
+4. Tell me the skill is ready
+```
+
+### GitHub Copilot
+
+Paste this into Copilot Chat:
+
+```
+Install the book-to-audio skill from https://github.com/dsribalaji/audiobook
+
+Steps:
+1. git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+2. Run: cd ~/.audiobook-skill && bash scripts/setup.sh
+3. When I ask to convert a book to audio, read ~/.audiobook-skill/SKILL.md and follow it
+4. Tell me the skill is ready
+```
+
+### Cursor
+
+Paste this into Cursor Chat:
+
+```
+Install the book-to-audio skill from https://github.com/dsribalaji/audiobook
+
+Steps:
+1. git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+2. Run: cd ~/.audiobook-skill && bash scripts/setup.sh
+3. Add ~/.audiobook-skill/SKILL.md to your Cursor rules or reference it as context
+4. When I ask to convert a book, follow the SKILL.md workflow
+5. Tell me the skill is ready
+```
+
+### Aider
+
+```
+/git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+!cd ~/.audiobook-skill && bash scripts/setup.sh
+/read ~/.audiobook-skill/SKILL.md
+```
+
+### Windsurf / Codeium
+
+```
+Install the book-to-audio skill from https://github.com/dsribalaji/audiobook
+
+Steps:
+1. git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+2. Run: cd ~/.audiobook-skill && bash scripts/setup.sh
+3. Reference ~/.audiobook-skill/SKILL.md when I ask to convert books to audio
+4. Tell me the skill is ready
+```
+
+### Any agent (generic)
+
+If your agent is not listed above, paste this:
+
+```
+I want to install the book-to-audio skill from https://github.com/dsribalaji/audiobook
+
+1. Clone the repo: git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+2. Run setup: cd ~/.audiobook-skill && bash scripts/setup.sh
+3. Read the SKILL.md file at ~/.audiobook-skill/SKILL.md
+4. When I ask to convert a PDF or EPUB to audiobook, follow the workflow in SKILL.md
+5. Output generated audio files to ~/.audiobook-skill/output/<book-name>/
+
+Tell me when it's ready.
+```
+
+---
 
 ## Conversion Modes
 
@@ -59,88 +123,39 @@ python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --o
 | `--mode 2` | **Full Chapters** | Each chapter read verbatim. One MP3 per chapter. | `01-Chapter-1.mp3`, `02-Chapter-2.mp3`, ... |
 | `--mode 3` | **Single Summary** | Entire book summarized to ~30%. One MP3 file. | `book-summary.mp3` |
 
-## Usage with Agentic CLI
+---
 
-### Option A: Use as a Skill (Recommended)
-
-Point your agent at the `SKILL.md` file. The agent will:
-
-1. Ask you for the book file, mode, and voice preference
-2. Extract text from the PDF/EPUB
-3. Summarize chapters (Mode 1) or the full book (Mode 3) using its own LLM
-4. Convert to MP3 with metadata
-5. Report the output location
-
-**opencode:**
-```
-Convert this book to audio: /path/to/book.pdf
-```
-
-**Claude Code / Cursor:**
-```
-Read the SKILL.md in /home/otwos/Projects/Audiobook/ and follow the instructions
-to convert my book to an audiobook.
-```
-
-### Option B: Manual CLI Usage
-
-#### Step 1: Extract Text
+## Manual CLI Usage
 
 ```bash
+git clone https://github.com/dsribalaji/audiobook.git ~/.audiobook-skill
+cd ~/.audiobook-skill
+bash scripts/setup.sh
 source .venv/bin/activate
+
+# Step 1: Extract text
 python scripts/extract.py "/path/to/book.pdf" --output chapters.json
+
+# Step 2: Convert to audio (mode 1=concise, 2=full, 3=single summary)
+python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --output ./output/my-book/
 ```
 
-Output:
-```
-Extracted 12 chapters from 'My Book Title'
-Language: en
-Output: chapters.json
-```
-
-The `chapters.json` file contains:
+The `chapters.json` structure:
 ```json
 {
   "title": "My Book Title",
   "author": "John Doe",
   "language": "en",
   "chapters": [
-    {"num": 1, "heading": "Chapter 1: The Beginning", "text": "..."},
-    {"num": 2, "heading": "Chapter 2: The Journey", "text": "..."}
+    {"num": 1, "heading": "Chapter 1", "text": "..."},
+    {"num": 2, "heading": "Chapter 2", "text": "..."}
   ]
 }
 ```
 
-#### Step 2: Summarize (Mode 1 and Mode 3 Only)
+For Mode 1/3, edit `chapters.json` to replace text with summaries before converting. For Mode 2, skip summarization.
 
-For **Mode 1** — edit `chapters.json` and replace each chapter's `text` with a ~30% summary.
-
-For **Mode 3** — merge all chapters into one and summarize to ~30%:
-```json
-{
-  "title": "My Book Title",
-  "author": "John Doe",
-  "language": "en",
-  "chapters": [
-    {"num": 1, "heading": "Book Summary", "text": "...summarized text..."}
-  ]
-}
-```
-
-For **Mode 2** — skip this step entirely.
-
-#### Step 3: Convert to Audio
-
-```bash
-# Mode 1: Concise chapters
-python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --output ./output/
-
-# Mode 2: Full chapters
-python scripts/tts_convert.py chapters.json --mode 2 --voice en-US-GuyNeural --output ./output/
-
-# Mode 3: Single summary
-python scripts/tts_convert.py chapters.json --mode 3 --voice en-US-GuyNeural --output ./output/
-```
+---
 
 ## Supported Languages & Voices
 
@@ -170,27 +185,31 @@ List all available voices:
 edge-tts --list-voices
 ```
 
+---
+
 ## File Structure
 
 ```
-Audiobook/
+audiobook/
 ├── SKILL.md                  # Agent instructions (works with any CLI)
 ├── README.md                 # This file
+├── install.sh                # One-line installer script
 ├── requirements.txt          # Python dependencies
+├── command/
+│   └── audiobook.md          # /audiobook slash command (opencode)
 ├── scripts/
-│   ├── setup.sh              # One-time setup (creates venv, installs deps)
+│   ├── setup.sh              # Creates venv, installs deps
 │   ├── extract.py            # PDF/EPUB → JSON text extraction
 │   ├── tts_convert.py        # JSON → MP3 conversion with metadata
 │   └── voices.json           # Language → voice mappings
-├── output/                   # Generated audiobook files
-└── .venv/                    # Python virtual environment (created by setup)
+└── output/                   # Generated audiobook files
 ```
+
+---
 
 ## Script Reference
 
 ### `scripts/extract.py`
-
-Extracts text from PDF or EPUB into structured JSON.
 
 ```bash
 python scripts/extract.py <file_path> [--output <json_file>]
@@ -201,21 +220,11 @@ python scripts/extract.py <file_path> [--output <json_file>]
 | `file_path` | Path to PDF or EPUB file |
 | `--output`, `-o` | Output JSON file path (default: stdout) |
 
-**Chapter detection heuristics:**
-- `Chapter X`, `CHAPTER X`, `Part X`, `Section X` patterns
-- `Lesson X`, `Session X`, `Unit X` patterns
-- Standalone numbers 1-30 on their own line
-- ALL CAPS headings (5-60 chars, no digits, max 8 words)
-- Minimum 200 chars accumulated before splitting to new chapter
+**Chapter detection:** `Chapter X`, `Part X`, `Section X`, `Lesson X`, standalone numbers 1-30, ALL CAPS headings (5-60 chars, no digits). Minimum 200 chars before splitting.
 
-**Language detection:**
-- Character script analysis (Cyrillic, CJK, Arabic, Greek, Devanagari)
-- Common word frequency for European languages
-- Falls back to English if uncertain
+**Language detection:** Cyrillic, CJK, Arabic, Greek, Devanagari script analysis + European word frequency. Falls back to English.
 
 ### `scripts/tts_convert.py`
-
-Converts chapter JSON to MP3 audiobook files.
 
 ```bash
 python scripts/tts_convert.py <json_file> --mode <1|2|3> [--voice <voice>] [--output <dir>]
@@ -224,110 +233,39 @@ python scripts/tts_convert.py <json_file> --mode <1|2|3> [--voice <voice>] [--ou
 | Argument | Description |
 |----------|-------------|
 | `json_file` | Path to chapters JSON file |
-| `--mode` | `1` = concise chapters, `2` = full chapters, `3` = single summary |
+| `--mode` | `1` = concise, `2` = full, `3` = single summary |
 | `--voice` | edge-tts voice name (default: `en-US-GuyNeural`) |
 | `--output`, `-o` | Output directory (default: `./output/`) |
 
-**Features:**
-- Auto-splits text >5000 chars at sentence boundaries
-- Merges split chunks back into single chapter MP3
-- Embeds ID3 metadata: title, artist (author), track number
-- Progress output to stderr
+Auto-splits text >5000 chars at sentence boundaries. Embeds ID3 metadata (title, artist, track number).
 
 ### `scripts/voices.json`
 
-Maps language codes to recommended voices. First voice in list is male default, second is female.
+Maps language codes to voices. First = male default, second = female.
 
 ### `scripts/setup.sh`
 
-One-time setup script. Creates Python venv and installs dependencies.
+Creates venv and installs deps. Uses `uv` if available, falls back to `python3 -m venv`.
 
-```bash
-bash scripts/setup.sh
-```
-
-Uses `uv` if available, falls back to `python3 -m venv`.
-
-## Agent Integration
-
-### How Agents Use This Skill
-
-When you ask an agent to "convert this book to audio", the agent:
-
-1. **Reads `SKILL.md`** — understands the workflow and available modes
-2. **Asks you** — file path, mode (1/2/3), voice preference
-3. **Runs `extract.py`** — gets structured text from your book
-4. **Summarizes** (Mode 1 & 3) — uses its own LLM to condense text to ~30%
-5. **Runs `tts_convert.py`** — generates MP3 files with metadata
-6. **Reports** — output location, file count, any issues
-
-### Supported Agent CLIs
-
-This skill works with any CLI that can:
-- Read markdown instruction files
-- Execute shell commands
-- Process and generate text (for summarization)
-
-Tested with:
-- **opencode** — load via `skills` config or place in `.opencode/skills/`
-- **Claude Code** — reference `SKILL.md` directly
-- **Cursor** — add as custom instruction
-- **Aider** — use `--read` flag with SKILL.md
-- **Any agent** — generic markdown instructions, no platform-specific config
-
-### Adding to opencode
-
-```json
-// opencode.json
-{
-  "skills": {
-    "paths": ["/home/otwos/Projects/Audiobook"]
-  }
-}
-```
-
-Or place the `Audiobook` folder inside `.opencode/skills/`:
-```bash
-cp -r /home/otwos/Projects/Audiobook .opencode/skills/book-to-audio
-```
+---
 
 ## Troubleshooting
 
-### "No text found in PDF"
-The PDF is likely a scanned image, not a text-based PDF. You need OCR first:
+**"No text found in PDF"** — Scanned image PDF. Needs OCR first:
 ```bash
-# Install tesseract
 sudo apt install tesseract-ocr
-
-# OCR the PDF
 ocrmypdf input.pdf output.pdf
 ```
-Then use `output.pdf` with extract.py.
 
-### "No chapters detected"
-The book doesn't have clear chapter headings. The entire book is treated as one chapter. You can manually edit `chapters.json` to split it.
+**"No chapters detected"** — No clear chapter headings. Entire book treated as one chapter. Edit `chapters.json` manually to split.
 
-### "Module not found" errors
-Re-run setup:
-```bash
-bash scripts/setup.sh
-```
+**"Module not found"** — Re-run `bash scripts/setup.sh`.
 
-### TTS errors about text length
-The script auto-splits text at 5000 chars. If errors persist:
-- Check voice name is valid: `edge-tts --list-voices`
-- Check internet connection (edge-tts requires network)
+**TTS errors** — Script auto-splits at 5000 chars. Check voice name with `edge-tts --list-voices`. Check internet connection.
 
-### Slow conversion
-edge-tts is network-based. Expectations:
-- 10-page chapter: ~30 seconds
-- 300-page book (full): ~15-30 minutes
-- Summary mode: ~2-5 minutes
+**Slow conversion** — edge-tts is network-based. ~30s per 10-page chapter. ~15-30 min for full 300-page book. ~2-5 min for summary mode. Progress prints to stderr.
 
-Each chapter prints progress to stderr so you can track it.
-
-### Double characters in extracted text
-Some PDFs encode text with duplicate characters (e.g., "WWhhaatt" instead of "What"). This is a PDF encoding issue, not a bug in extract.py. Use a different source PDF or preprocess with OCR.
+**Double characters** — Some PDFs encode with duplicate chars ("WWhhaatt" instead of "What"). PDF encoding issue, not a bug. Use a different source or OCR.
 
 ## License
 
