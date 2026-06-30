@@ -1,0 +1,6 @@
+.venv/
+output/
+*.pdf
+__pycache__/
+*.pyc
+chapters.json

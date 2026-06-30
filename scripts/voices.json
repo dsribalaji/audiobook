@@ -1,0 +1,19 @@
+{
+  "en": {"name": "English", "voices": ["en-US-GuyNeural", "en-US-JennyNeural", "en-GB-RyanNeural", "en-GB-SoniaNeural"]},
+  "el": {"name": "Greek", "voices": ["el-GR-NestorasNeural", "el-GR-AthinaNeural"]},
+  "ru": {"name": "Russian", "voices": ["ru-RU-DmitryNeural", "ru-RU-SvetlanaNeural"]},
+  "de": {"name": "German", "voices": ["de-DE-ConradNeural", "de-DE-KatjaNeural"]},
+  "ja": {"name": "Japanese", "voices": ["ja-JP-KeitaNeural", "ja-JP-NanamiNeural"]},
+  "fr": {"name": "French", "voices": ["fr-FR-HenriNeural", "fr-FR-DeniseNeural"]},
+  "es": {"name": "Spanish", "voices": ["es-ES-AlvaroNeural", "es-ES-ElviraNeural"]},
+  "pt": {"name": "Portuguese", "voices": ["pt-BR-AntonioNeural", "pt-BR-FranciscaNeural"]},
+  "zh": {"name": "Chinese", "voices": ["zh-CN-YunxiNeural", "zh-CN-XiaoxiaoNeural"]},
+  "ko": {"name": "Korean", "voices": ["ko-KR-InJoonNeural", "ko-KR-SunHiNeural"]},
+  "it": {"name": "Italian", "voices": ["it-IT-DiegoNeural", "it-IT-ElsaNeural"]},
+  "ar": {"name": "Arabic", "voices": ["ar-SA-HamedNeural", "ar-SA-ZariyahNeural"]},
+  "hi": {"name": "Hindi", "voices": ["hi-IN-MadhurNeural", "hi-IN-SwaraNeural"]},
+  "tr": {"name": "Turkish", "voices": ["tr-TR-AhmetNeural", "tr-TR-EmelNeural"]},
+  "nl": {"name": "Dutch", "voices": ["nl-NL-MaartenNeural", "nl-NL-ColetteNeural"]},
+  "pl": {"name": "Polish", "voices": ["pl-PL-MarekNeural", "pl-PL-AgnieszkaNeural"]},
+  "sv": {"name": "Swedish", "voices": ["sv-SE-MattiasNeural", "sv-SE-SofieNeural"]}
+}
