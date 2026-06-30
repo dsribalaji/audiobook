@@ -119,9 +119,9 @@ Tell me when it's ready.
 
 | Mode | Name | Description | Output |
 |------|------|-------------|--------|
-| `--mode 1` | **Concise Chapters** | Each chapter summarized to ~30% of original length. One MP3 per chapter. | `01-Chapter-1.mp3`, `02-Chapter-2.mp3`, ... |
-| `--mode 2` | **Full Chapters** | Each chapter read verbatim. One MP3 per chapter. | `01-Chapter-1.mp3`, `02-Chapter-2.mp3`, ... |
-| `--mode 3` | **Single Summary** | Entire book summarized to ~30%. One MP3 file. | `book-summary.mp3` |
+| `--mode 1` | **Full Chapters** | 100% original text. One MP3 per chapter. | `01-Chapter-1.mp3`, `02-Chapter-2.mp3`, ... |
+| `--mode 2` | **Full Book** | 100% original text. Single MP3 with all chapters. | `full-book.mp3` |
+| `--mode 3` | **Single Summary** | Entire book summarized to ~30-40%. One MP3. | `book-summary.mp3` |
 
 ---
 
@@ -136,7 +136,7 @@ source .venv/bin/activate
 # Step 1: Extract text
 python scripts/extract.py "/path/to/book.pdf" --output chapters.json
 
-# Step 2: Convert to audio (mode 1=concise, 2=full, 3=single summary)
+# Step 2: Convert to audio (mode 1=full chapters, 2=full book, 3=summary)
 python scripts/tts_convert.py chapters.json --mode 1 --voice en-US-GuyNeural --output ./output/my-book/
 ```
 

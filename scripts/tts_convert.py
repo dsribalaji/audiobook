@@ -119,7 +119,48 @@ def merge_mp3s(files: list[Path], output: Path):
 
 
 async def convert_single(chapters: list, voice: str, output_dir: Path, author: str = "Unknown"):
-    """Convert all chapters into a single MP3 (Mode 3)."""
+    """Convert all chapters into a single MP3 (Mode 2 - full book, no summarization)."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    combined_text = ""
+    for chapter in chapters:
+        heading = chapter.get("heading", "")
+        text = chapter.get("text", "")
+        if heading:
+            combined_text += f"{heading}.\n\n"
+        combined_text += text + "\n\n"
+
+    if not combined_text.strip():
+        sys.exit("Error: No text to convert.")
+
+    safe_name = "full-book.mp3"
+    filepath = output_dir / safe_name
+
+    print(f"Converting {len(combined_text)} chars to audio...", file=sys.stderr)
+
+    chunks = split_text(combined_text)
+    print(f"Split into {len(chunks)} chunks", file=sys.stderr)
+
+    if len(chunks) == 1:
+        await tts_to_file(chunks[0], voice, filepath)
+    else:
+        temp_files = []
+        for j, chunk in enumerate(chunks):
+            temp_path = output_dir / f".tmp_full_{j}.mp3"
+            print(f"  Chunk {j+1}/{len(chunks)}...", file=sys.stderr)
+            await tts_to_file(chunk, voice, temp_path)
+            temp_files.append(temp_path)
+
+        merge_mp3s(temp_files, filepath)
+        for f in temp_files:
+            f.unlink(missing_ok=True)
+
+    set_mp3_metadata(filepath, "Full Book", author, 1)
+    print(f"\nDone. Output: {filepath}", file=sys.stderr)
+
+
+async def convert_summary(chapters: list, voice: str, output_dir: Path, author: str = "Unknown"):
+    """Convert summarized book into a single MP3 (Mode 3)."""
     output_dir.mkdir(parents=True, exist_ok=True)
 
     combined_text = ""
@@ -163,7 +204,7 @@ def main():
     parser = argparse.ArgumentParser(description="Convert chapter JSON to MP3 audiobook")
     parser.add_argument("json_file", help="Path to chapters JSON file")
     parser.add_argument("--mode", type=int, required=True, choices=[1, 2, 3],
-                        help="1=concise chapters, 2=full chapters, 3=single summary")
+                        help="1=full chapters (one MP3 each), 2=full book (single MP3), 3=summary (single MP3)")
     parser.add_argument("--voice", default="en-US-GuyNeural",
                         help="edge-tts voice name (default: en-US-GuyNeural)")
     parser.add_argument("--output", "-o", default="./output",
@@ -192,10 +233,12 @@ def main():
     print(f"Output: {output_dir}", file=sys.stderr)
     print("", file=sys.stderr)
 
-    if args.mode == 3:
+    if args.mode == 1:
+        asyncio.run(convert_chapters(chapters, voice, output_dir, args.mode, author))
+    elif args.mode == 2:
         asyncio.run(convert_single(chapters, voice, output_dir, author))
     else:
-        asyncio.run(convert_chapters(chapters, voice, output_dir, args.mode, author))
+        asyncio.run(convert_summary(chapters, voice, output_dir, author))
 
 
 if __name__ == "__main__":

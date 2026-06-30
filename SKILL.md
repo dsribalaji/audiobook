@@ -30,9 +30,9 @@ source .venv/bin/activate
 
 | Mode | Description | Output |
 |------|-------------|--------|
-| **1. Concise chapters** | Each chapter summarized to ~30% of original. One MP3 per chapter. | `01-chapter.mp3`, `02-chapter.mp3`, ... |
-| **2. Full chapters** | Each chapter read verbatim. One MP3 per chapter. | `01-chapter.mp3`, `02-chapter.mp3`, ... |
-| **3. Single summary** | Entire book summarized to ~30%. One MP3 file. | `book-summary.mp3` |
+| **1. Full chapters** | Each chapter at 100% original text. One MP3 per chapter. | `01-chapter.mp3`, `02-chapter.mp3`, ... |
+| **2. Full book** | Entire book at 100% original text. One MP3 file. | `full-book.mp3` |
+| **3. Single summary** | Entire book summarized to ~30-40%. One MP3 file. | `book-summary.mp3` |
 
 ## Workflow
 
@@ -70,26 +70,13 @@ This produces `chapters.json` with structure:
 
 Report to user: title, author, number of chapters, detected language.
 
-### Step 3: Summarize (Mode 1 and Mode 3 only)
+### Step 3: Summarize (Mode 3 only)
 
 The agent summarizes the text using its own LLM. No external API needed.
 
-**Mode 1 — summarize each chapter:**
-
-Read `chapters.json`. For each chapter, summarize the text to ~30% of original
-length. Preserve:
-- Key concepts, principles, and arguments
-- Author's main examples and stories (condensed)
-- Chapter structure and logical flow
-- Important quotes or definitions
-- Actionable takeaways
-
-Write the summarized text back into the same `chapters.json` format, replacing
-each chapter's text with the summary.
-
 **Mode 3 — summarize entire book:**
 
-Concatenate all chapter texts. Summarize the combined text to ~30%. Write the
+Concatenate all chapter texts. Summarize the combined text to ~30-40%. Write the
 summary as a single chapter in `chapters.json`:
 
 ```json
@@ -104,17 +91,23 @@ summary as a single chapter in `chapters.json`:
 ```
 
 **Summary guidelines:**
-- Target ~30% of original word count
+- Target ~30-40% of original word count
 - Use clear, spoken-language style (this will be read aloud)
 - Avoid bullet points — write in flowing paragraphs suitable for speech
 - Preserve the author's voice and key terminology
 - Include chapter/section transitions so the audio flows naturally
+
+### Step 4: Convert to audio (Mode 1 and Mode 2 — no summarization needed)
+
+For Mode 1 and Mode 2, skip Step 3 and go directly to conversion.
 
 ### Step 4: Convert to audio
 
 ```bash
 python scripts/tts_convert.py chapters.json --mode <1|2|3> --voice <voice> --output ./output/
 ```
+
+Mode 1 and 2 use original text. Mode 3 uses summarized text from Step 3.
 
 **Voice selection:**
 - Read `scripts/voices.json` for the detected language

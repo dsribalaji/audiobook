@@ -29,9 +29,9 @@ Ask the user these questions (use the question tool):
 
 1. **File path** — path to their PDF or EPUB file. Use `$ARGUMENTS` if provided.
 2. **Mode**:
-   - `1` — Concise chapters (each chapter summarized to ~30%, one MP3 per chapter)
-   - `2` — Full chapters (verbatim, one MP3 per chapter)
-   - `3` — Single summary (entire book summarized to ~30%, one MP3)
+   - `1` — Full chapters (100% original, one MP3 per chapter)
+   - `2` — Full book (100% original, single MP3 with all chapters)
+   - `3` — Single summary (entire book summarized to ~30-40%, one MP3)
 3. **Voice** — Male or Female?
 
 ## Step 2: Extract text
